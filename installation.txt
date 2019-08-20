@@ -1,0 +1,24 @@
+1. INSTALL VIRTUAL BOX
+2. INSTALL VAGRANT
+3. INSTALL CHOCLATEY 
+
+	Click Start and type “powershell“
+	Right-click Windows Powershell and choose “Run as Administrator“
+	Paste the following command into Powershell and press enter.
+	
+	Set-ExecutionPolicy Bypass -Scope Process -Force; `
+	  iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+4.cyg-get openssh 
+5.cyg-get rsync
+6.Find the default location for vm
+7.Open Cygdrive
+  go to your folder 
+  Create a new directory 
+  	mkdir Boxes
+  clone the git directory
+  	git clone https://github.com/aalkilani/spark-kafka-cassandra-applying-lambda-architecture.git
+8. Navigate to the directory which are vagrant 
+   vagrant up
+   It would download all the necessary files
+9.
