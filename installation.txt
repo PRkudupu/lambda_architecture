@@ -1,3 +1,7 @@
+
+Before following these steps, install JAVA SDK 8 and intellj community version
+In this project we are using Scala 2.11.8
+
 1.INSTALL VIRTUAL BOX
 2.INSTALL VAGRANT
 3.INSTALL CHOCLATEY 
@@ -28,7 +32,7 @@
     vagrant up
 9. GET VAGRANT DOWN
 	vagrant halt
-10 SSH to vagrant	
+10. SSH to vagrant	
 	vagrant ssh
 	
 		System load:  1.04               Processes:              92
@@ -36,5 +40,15 @@
 		Memory usage: 4%                 IP address for eth0:    10.0.2.15
 		Swap usage:   0%                 IP address for docker0: 172.17.0.1
 
-
+10.LIST THE SERVICES RUNNING IN THE MACHINE
+	docker ps
+11.DIRECTORY FOR HOLDING THE DATA
+	ls /vagrant/
 	
+12. CHECK THE LOCATION FOR VAGRANT DIRECTORY
+	This can be easily done by creating a file and 
+    C:\Boxes\spark-kafka-cassandra-applying-lambda-architecture\vagrant
+13. CREATE A FILE UNDER VAGRATN DIRECTORY
+	touch readme.me
+14. 
+ 
