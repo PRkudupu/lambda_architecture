@@ -1,0 +1,23 @@
+THIS MODULE IS RESPONSIBLE FOR CREATING BATCH
+
+	1.CREATE A PACKAGE KNOWN A BATCH
+		CREATE A OBJECT CALLED AS BATCHJOB
+		
+	2. ADD THE NECESSARY DEPENDENCIES TO THE OBJECT IN THE PPM.XML
+	   some of the dependencies shown below
+		<dependencies>
+        <dependency>
+            <groupId>com.typesafe</groupId>
+            <artifactId>config</artifactId>
+            <version>1.3.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.datastax.spark</groupId>
+            <artifactId>spark-cassandra-connector_2.11</artifactId>
+            <version>${spark-cassandra-connector.version}</version>
+        </dependency>
+	   
+	3. CREATE A BATCH PAGKAGE
+		CREATE A NEW OBJECT FOR BATCH JOB
+			import all the necessary dependencies

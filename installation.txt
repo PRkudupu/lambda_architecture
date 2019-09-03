@@ -50,25 +50,3 @@ In this project we are using Scala 2.11.8
     C:\Boxes\spark-kafka-cassandra-applying-lambda-architecture\vagrant
 13. CREATE A FILE UNDER VAGRANT DIRECTORY
 	touch readme.me
-14. CREATE PROJECT TEMPLATE
-		CREATE A NEW MAVEN PROJECT
-		CREATE A NEW MODULE
-			ADD FRAMEWORK SUPPORT AND SELECT Scala
-		CREATE A NEW DIRECTORY NAMES AS SCALA
-			SET THIS DIRECTORY AS SOURCE ROOT
-		CREATE A NEW SCALA WORKSHEET 
-			It is a repl environment 
-			Test your code
-		
- 
-15. CREATE CLICKSTREAM PRODUCER PROJECT
-		create new directory scala--> set it as source directory
-		COPY RESOURCES
-			copy resources to the folder products.csv,referrers.csv and application.conf
-		CREATE SUB DIRECTORIES
-			Create a packageS named as clickstream and config
-			CLICKSTREAM
-				
-			
-		
-		
