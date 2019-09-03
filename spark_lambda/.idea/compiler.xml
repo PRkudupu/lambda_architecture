@@ -6,8 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="module-1" />
+        <module name="spark-lambda-imp" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="module-1" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
 </project>

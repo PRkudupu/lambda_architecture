@@ -61,3 +61,14 @@ In this project we are using Scala 2.11.8
 			Test your code
 		
  
+15. CREATE CLICKSTREAM PRODUCER PROJECT
+		create new directory scala--> set it as source directory
+		COPY RESOURCES
+			copy resources to the folder products.csv,referrers.csv and application.conf
+		CREATE SUB DIRECTORIES
+			Create a packageS named as clickstream and config
+			CLICKSTREAM
+				
+			
+		
+		
