@@ -21,3 +21,25 @@ THIS MODULE IS RESPONSIBLE FOR CREATING BATCH
 	3. CREATE A BATCH PAGKAGE
 		CREATE A NEW OBJECT FOR BATCH JOB
 			import all the necessary dependencies
+			initialize sparkcontext and validate data load
+			// setup spark context
+				val sc = new SparkContext(conf)
+				implicit val sqlContext = new SQLContext(sc)
+
+				// initialize input RDD
+				val sourceFile = "C:\\Boxes\\spark-kafka-cassandra-applying-lambda-architecture\\vagrant\\data.tsv"
+				val input = sc.textFile(sourceFile)
+				input.foreach(println)
+			
+			output
+			1567454730494	Direct	page_view		Visitor-483116	Page-6	Andersen's,Creamy Soup Split Pea
+			1567395352837	Other	add_to_cart		Visitor-2178082	Page-2	California Pizza Kitchen,Sicilian Recipe Pizza
+			1567454730494	Yahoo	page_view		Visitor-1695657	Page-13	Safeway Kitchens,Clover Honey
+	4.ADD NEW PACKAGE DOMAIN
+		Here we specify case class for Activity
+		start defining the rdd
+		  val record= line.split("\\t")
+			//Milli second in hour. No of milli sec in hour. Used to convert the original time stamp to an hourly timestamp
+			val MS_IN_HOUR = 1000 * 60 *60
+			Activity(record(0).toLong / MS_IN_HOUR * MS_IN_HOUR,record(1),record(2),record(3),record(4),record(5),record(6) )
+		
