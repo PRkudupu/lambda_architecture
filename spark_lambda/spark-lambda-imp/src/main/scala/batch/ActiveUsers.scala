@@ -23,7 +23,8 @@ object ActiveUsers {
       //Validate if the actual input is of the actual length
       if (record.length == 13){
         //flatMap would unbox and return the activity
-        Some(domain.PurchaseOrder(record(0), record(1), record(2), record(3), record(4), record(5), record(6),record(7), record(8), record(9), record(10), record(11), record(12)))
+        Some(domain.PurchaseOrder(record(0), record(1), record(2), record(3), record(4), record(5), record(6),record(7),
+          record(8), record(9), record(10), record(11), record(12)))
       }
       else
         None
@@ -43,14 +44,25 @@ object ActiveUsers {
       .option("mergeSchema","true")
       .parquet(parquetSourceFile)
     //Register temp table
-    parquetFile.registerTempTable("purchase_order_tb")
+    parquetFile.registerTempTable("purchase_order_t")
     parquetFile.printSchema()
-    val activeUsers=sqlContext.sql("""select order_number
-                                  , cosmos_customerid
-                                  , header_purchase_date
-                                  , datediff(from_unixtime(unix_timestamp()), to_date(header_purchase_date)) as diff
-                                  , months_between(from_unixtime(unix_timestamp()),header_purchase_date) as month_diff
-                                   from purchase_order_tb""")
+    val activeUsers=sqlContext.sql("""select a.order_number
+          , a.cosmos_customerid
+          , header_purchase_date
+           , case when months_between(from_unixtime(unix_timestamp()),header_purchase_date) < 36.0
+                then 1 else 0 end as is_36_months
+          , case when months_between(from_unixtime(unix_timestamp()),header_purchase_date) < 24.0
+                then 1 else 0 end as is_24_months
+          , case when months_between(from_unixtime(unix_timestamp()),header_purchase_date) < 12.0
+                then 1 else 0 end as is_12_months
+           from purchase_order_t a
+           join
+           (select cosmos_customerid
+                , max(header_purchase_date) as max_date
+           from
+           purchase_order_t
+           group by cosmos_customerid) b
+           on a.cosmos_customerid=b.cosmos_customerid and a.header_purchase_date=b.max_date""")
     activeUsers.foreach(println)
 
   }
