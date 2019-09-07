@@ -29,7 +29,7 @@ object BatchJob {
 
     //val inputDF = input.map { line =>
     //flatMap expects a type that would unbox
-    val inputDF = input.flatMap { line =>
+      val inputDF = input.flatMap { line =>
       //split and assign it to a variable
       val record = line.split("\\t")
       //Milli second in hour. No of milli sec in hour. Used to convert the original time stamp to an hourly timestamp
