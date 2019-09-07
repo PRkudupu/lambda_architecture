@@ -45,8 +45,12 @@ object ActiveUsers {
     //Register temp table
     parquetFile.registerTempTable("purchase_order_tb")
     parquetFile.printSchema()
-    val activeUsers=sqlContext.sql("""select
-                                    * from purchase_order_tb""")
+    val activeUsers=sqlContext.sql("""select order_number
+                                  , cosmos_customerid
+                                  , header_purchase_date
+                                  , datediff(from_unixtime(unix_timestamp()), to_date(header_purchase_date)) as diff
+                                  , months_between(from_unixtime(unix_timestamp()),header_purchase_date) as month_diff
+                                   from purchase_order_tb""")
     activeUsers.foreach(println)
 
   }
