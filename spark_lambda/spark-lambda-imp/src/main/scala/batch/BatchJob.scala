@@ -6,9 +6,8 @@ import org.apache.spark.sql.SQLContext
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.sql.functions._
 
-
 object BatchJob {
-  def main (args: Array[String]): Unit = {
+  def main(args: Array[String]): Unit = {
 
     // get spark configuration
     val conf = new SparkConf()
@@ -30,7 +29,7 @@ object BatchJob {
 
     //val inputDF = input.map { line =>
     //flatMap expects a type that would unbox
-     val inputDF = input.flatMap { line =>
+    val inputDF = input.flatMap { line =>
       //split and assign it to a variable
       val record = line.split("\\t")
       //Milli second in hour. No of milli sec in hour. Used to convert the original time stamp to an hourly timestamp
@@ -42,32 +41,34 @@ object BatchJob {
       }
       else
         None
-      }.toDF()
+    }.toDF()
     val df =inputDF.select(
       //Function to add one month( Time_stamp_hour would be a month ahead.
       add_months(from_unixtime(inputDF("timestamp_hour")/1000),numMonths =1).as(alias="timestamp_hour")
       ,inputDF("referrer"),inputDF("action"),inputDF("prevPage"),inputDF("page"),inputDF("visitor"),inputDF("product")
     )
-   // register temp table
+    // register temp table
     df.registerTempTable(tableName="activity")
 
     val visitorsByProduct=sqlContext.sql(
       //triple quote is used for multiline code
       """SELECT
-        product,
+       product,
         timestamp_hour,
         sum(case when action ='purchase' then 1 else 0 end) as purchase_count,
         sum(case when action ='add_to_cart' then 1 else 0 end) as add_to_cart_count,
         sum(case when action ='page_view' then 1 else 0 end) as page_view_count
         from activity
         group by product, timestamp_hour
-        """).cache()
-
+       """).cache()
+    visitorsByProduct.show()
     //Shows every product,timestamp and no of unique visitors
     //((Orbit,Spearmint Sugarfree Gum,1567454400000),1)
-    visitorsByProduct.foreach(println)
-    //would have product, hour(key) and activity(purchase/add_to_target/page_view)
-    //((Opti-Free,Pure Moist Contact Solution,1567454400000),(0,0,1))
-    //activityByProduct.foreach(println)
-}
+    visitorsByProduct.write
+      .option("header", "true")
+      .mode("overwrite")
+      .save("C:\\Boxes\\spark-kafka-cassandra-applying-lambda-architecture\\vagrant\\output.csv")
+
+
+  }
 }

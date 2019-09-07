@@ -50,3 +50,22 @@ In this project we are using Scala 2.11.8
     C:\Boxes\spark-kafka-cassandra-applying-lambda-architecture\vagrant
 13. CREATE A FILE UNDER VAGRANT DIRECTORY
 	touch readme.me
+
+14. INSTALL BDE PIPELINE
+	https://github.com/big-data-europe/app-bde-pipeline
+	
+	git clone https://github.com/big-data-europe/app-bde-pipeline.git
+	cd app-bde-pipeline
+	docker-compose up -d
+	
+15. INSTALL DOCKER COMPOSER
+	sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+	sudo chmod +x /usr/local/bin/docker-compose
+
+16 INSTALLATION FOLDER
+	This would be the home directory ~/app-bde-pipeline
+	
+17.INSTALL SPARK
+    rm docker-compose.yml
+	wget https://github.com/big-data-europe/docker-spark/blob/0933458e415479b2fc00055ac1a596d0cc864029/docker-compose.yml
+	
