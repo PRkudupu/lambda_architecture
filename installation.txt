@@ -69,3 +69,4 @@ In this project we are using Scala 2.11.8
     rm docker-compose.yml
 	wget https://github.com/big-data-europe/docker-spark/blob/0933458e415479b2fc00055ac1a596d0cc864029/docker-compose.yml
 	
+	
