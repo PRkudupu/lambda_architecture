@@ -31,5 +31,20 @@ package object domain {
                               dt	:String,
                               inputProps:Map[String,String]=Map()
                           )
+  case class CustomerLoyaltyDetails(cosmos_customerid	:String,
+                                    loyalty_card_number:String,
+                                    loyalty_registration_date:String,
+                                    registration_event	:String,
+                                    loyalty_signup_channel	:String,
+                                    loyalty_signup_date	:String,
+                                    customer_identifier:String,
+                                    registration_summary	:String,
+                                    loyalty_lifetime_points:String,
+                                    loyalty_current_points	:String,
+                                    loyalty_signup_storeid	:String,
+                                    loyalty_status_rfval_id:String,
+                                    dt:String,
+                                    inputProps:Map[String,String]=Map()
+                             )
 
 }
