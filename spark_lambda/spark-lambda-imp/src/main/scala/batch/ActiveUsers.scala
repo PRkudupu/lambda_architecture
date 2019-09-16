@@ -10,7 +10,11 @@ object ActiveUsers {
     val sc = new SparkContext(init())
     implicit val sqlContext = new SQLContext(sc)
     import sqlContext.implicits._
+
     /****
+     * PURCHASE ORDER
+     * **********/
+     /**
      Read text file from the specified location.
      Add schema to the file
      */
@@ -46,10 +50,13 @@ object ActiveUsers {
     //Register temp table
     parquetFile.registerTempTable("purchase_order_t")
     parquetFile.printSchema()
+    /**
+     * GET ACTIVE USERS FOR THE LAST 36, 24 AND 12 MONTHS
+     */
     val activeUsers=sqlContext.sql("""select a.order_number
           , a.cosmos_customerid
           , header_purchase_date
-           , case when months_between(from_unixtime(unix_timestamp()),header_purchase_date) < 36.0
+          , case when months_between(from_unixtime(unix_timestamp()),header_purchase_date) < 36.0
                 then 1 else 0 end as is_36_months
           , case when months_between(from_unixtime(unix_timestamp()),header_purchase_date) < 24.0
                 then 1 else 0 end as is_24_months
@@ -64,6 +71,71 @@ object ActiveUsers {
            group by cosmos_customerid) b
            on a.cosmos_customerid=b.cosmos_customerid and a.header_purchase_date=b.max_date""")
     activeUsers.foreach(println)
+
+    /**
+     * GET CUSTOMER CHANNELS
+     */
+    /****
+     Read text file from the specified location.
+     Add schema to the file
+     */
+    val customerIdentitySource = "C:\\Boxes\\spark-kafka-cassandra-applying-lambda-architecture\\vagrant\\customer_identity.tsv"
+    val inputCustomerIdentity = sc.textFile(customerIdentitySource)
+
+    val customerIdentityDF = inputCustomerIdentity.flatMap { line =>
+      //split and assign it to a variable
+      val record = line.split("\\t")
+      //Validate if the actual input is of the actual length
+      if (record.length == 6){
+        //flatMap would unbox and return the activity
+        Some(domain.CustomerIdentity(record(0), record(1), record(2), record(3), record(4), record(5)))
+      }
+      else
+        None
+    }.toDF()
+    customerIdentityDF.show()
+    /**
+     * Write dataframe with schema as parquet file
+     */
+    writeParquet(customerIdentityDF,"customer_identity_parquet")
+
+    /**
+     * Read for parquet file
+     */
+    val customerIdentityPQ = "C:\\Boxes\\spark-kafka-cassandra-applying-lambda-architecture\\vagrant\\customer_identity_parquet"
+    val customerIdentityPQFile = sqlContext.read
+      .option("mergeSchema","true")
+      .parquet(customerIdentityPQ)
+    //Register temp table
+    customerIdentityPQFile.registerTempTable("customer_identity_t")
+    customerIdentityPQFile.printSchema()
+    /**
+     * GET CUSTOMER IDENTITY
+     */
+    val customerIdentity=sqlContext.sql(
+      """
+         select a.cosmos_customerid
+        , a.atg_id
+        , a.channel_name
+        , a.is_none
+        , a.is_online
+        , a.is_store
+        , case when a.is_online = 1 and a.is_store =1 then 1 else 0 end as is_omni
+        from
+                (select
+                  ci.cosmos_customerid
+                   , ci.channel_name
+                   , case when ci.channel_name ='UNASSIGNED' then 1 else 0 end as is_none
+                   , case when ci.channel_name ='SITE' then 1 else 0  end as is_online
+                   , case when ci.channel_name <> 'SITE' and ci.channel_name <> 'UNASSIGNED' then 1 else 0 end as is_store
+                  , alternateid as atg_id
+                from customer_identity_t ci
+                left outer join purchase_order_t po
+                  on ci.cosmos_customerid =po.cosmos_customerid and alternateid_type='atg_id_1'
+                  ) a
+      """)
+    println("Customer identity")
+    customerIdentity.foreach(println)
 
   }
 

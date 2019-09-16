@@ -23,5 +23,13 @@ package object domain {
                             dt:String,
                             inputProps:Map[String,String]=Map()
                      )
+  case class CustomerIdentity(cosmos_customerid	:String,
+                              alternateid:String,
+                              alternateid_type	:String,
+                              customer_sourceid:String,
+                              channel_name	:String,
+                              dt	:String,
+                              inputProps:Map[String,String]=Map()
+                          )
 
 }
