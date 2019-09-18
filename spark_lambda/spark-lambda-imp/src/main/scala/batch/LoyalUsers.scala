@@ -19,7 +19,7 @@ object LoyalUsers {
      Read text file from the specified location.
      Add schema to the file
      */
-    val sourceFile =root+"customer_loyalty_details.tsv"
+    val sourceFile =root+"customer_loyalty_detail.tsv"
     val input = sc.textFile(sourceFile)
 
     val inputDF = input.flatMap { line =>
@@ -39,9 +39,9 @@ object LoyalUsers {
     /**
      * Write dataframe with schema as parquet file
      */
-    writeParquet(inputDF,"customer_loyalty_details_pq")
+    writeParquet(inputDF,"customer_loyalty_detail_pq")
 
-    val parquetSourceFile = root+"customer_loyalty_details_pq"
+    val parquetSourceFile = root+"customer_loyalty_detail_pq"
     val parquetFile = sqlContext.read
       .option("mergeSchema","true")
       .parquet(parquetSourceFile)
@@ -81,13 +81,13 @@ object LoyalUsers {
     /**
      * Write dataframe with schema as parquet file
      */
-    writeParquet(po_inputDF,"purchase_order_parquet")
+    writeParquet(po_inputDF,"purchase_order_pq")
 
     /**
      * Read for parquet file
      */
 
-    val po_sourceFile_pq = root+"purchase_order_parquet"
+    val po_sourceFile_pq = root+"purchase_order_pq"
     val po_pq = sqlContext.read
       .option("mergeSchema","true")
       .parquet(po_sourceFile_pq)
@@ -188,5 +188,6 @@ object LoyalUsers {
       .mode("overwrite")
       .save(root+fileName)
     }
+
 
 }
